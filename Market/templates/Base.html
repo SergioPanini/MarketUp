@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" href="{% static "css/Base.css" %}">
+    <title>Market Up</title>
+<head>
+
+<body> 
+
+    <div class='block_1'>
+        
+        
+        <div class='logo'>
+            <h2>Market Up</h2>
+            <br/>
+        </div>
+        
+        <div class='menu'>    
+            
+            <h2>Menu</h2>
+            <a href="/shop/about"><div class='MenuItemHov'><div class='MenuItem'><h4>О нас</h4></div></div></a>
+                
+                {% if Aut == True %}
+                    <a href="/shop/me"><div class='MenuItemHov'><div class='MenuItem'><h4>Аккаунт</h4></div></div></a>
+                {% else %}
+                    <a href="/shop/signin"><div class='MenuItemHov'><div class='MenuItem'><h4>Вход</h4></div></div></a>
+                {% endif %}
+                
+                <a href="/shop/products"><div class='MenuItemHov'><div class='MenuItem'><h4>Товары</h4></div></div></a>
+                <h4>Тех поддержка:</h4>
+                <h4>Sergey.panin.2019@gmail.com</h4>
+                
+        </div>
+    
+    </div>
+    
+    <div class='block_2'>
+        <div class='content'>
+        
+        {% block content %}
+        {% endblock content %}   
+        
+        </div>
+    </div>
+    
+    <div class='block_3'>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<h2 class='NamePart'>Управление аккаунтом</h2>
+
+<p class='SystemMessage'>{{ message }}</p>
+
+<div class="userdata">
+    <div class="UDT">
+
+        <h4>Личные данные:</h4>
+        <h4>Name: {{UserData.Name}}</h4>
+        <h4>Email: {{UserData.Email}}</h4>
+        <h4>Password: {{UserData.Password}}</h4>
+        <h4>Phone: {{UserData.Phone}}</h4>
+
+    </div>
+
+    <div class='EditUserDataForm'>
+        <h4>Изменить личные данные:</h4>
+        <form method='POST'>
+            {% csrf_token%}
+
+            <table>
+                {{Form}}
+            </table>
+            <input type='submit' value='Edit'>
+        </form>
+    </div>
+
+</div>
+
+<div class='MenuItemHovRegBox'>
+    <div class='MenuItemHovReg'><a href='../signout/'>
+            <h4> Выйти из аккаунта</h4>
+        </a></div>
+</div>
+
+
+
+<div class="Products">
+    <div class="ProductsLabel">
+        <div class="ProductsLabelName">
+            <h4>Ваши товары:</h4>
+        </div>
+        <div class='ProductsLabelButton'>
+            <a href='../addproduct/'>
+                <h4> Добавить товар</h4>
+            </a>
+        </div>
+    </div>
+    {% for i in Products %} <a href="../product/{{i.id}}">
+        <div class="ProductTable">
+            <h4>{{i.Name}}</h4>
+            <p>{{i.Description}}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+
+
+{% endblock content %}

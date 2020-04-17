@@ -1,0 +1,18 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<h2 class='NamePart'>Добавление товара</h2>
+
+<p class='SystemMessage'>{{ message }}</p>
+
+{% if Form %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ Form }}
+    </table>
+    <input type="submit" value="Отправить">
+</form>
+{% endif %}
+
+{% endblock content %}

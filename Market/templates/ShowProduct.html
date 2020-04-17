@@ -1,0 +1,16 @@
+{%extends "Base.html" %}
+
+{% block content %}
+<h2 class='NamePart'>Поиск товаров</h2>
+
+<p class='SystemMessage'>{{ message }}</p>
+
+{% if product %}
+    <h3>{{product.Name}}</h3>
+    <p>{{product.Description}}</p>
+    <h3>Продавец:{{owner}}</h3>
+    <h3>Телефон:{{phone_owner}}</h3>
+    <img src="/media/{{product.img}}">
+    {% endif %}
+
+{% endblock content %}

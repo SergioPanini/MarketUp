@@ -1,0 +1,29 @@
+{% extends "Base.html" %}
+
+
+
+
+
+{% block content %}
+<h2 class='NamePart'>Авторизация</h2>
+
+<p class='SystemMessage'>{{ message }}</p>
+
+{% if Form %}
+<form method='POST' enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ Form }}
+        </table>
+        
+    <input type='submit' value='send'>
+</form>
+<div class='MenuItemHovReg'><a href='../reg/'><h4> Регистрация</h4></a></div>
+{% endif %}
+
+{% if Aut == True %}
+    <div class='MenuItemHovReg'><a href='../signout/'><h4> Выйти</h4></a></div>
+
+    {% endif %}
+
+{% endblock content %}

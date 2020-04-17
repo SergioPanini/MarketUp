@@ -1,0 +1,144 @@
+body{
+    margin:0;
+    padding:0;
+}
+.block_1{
+margin:0;
+padding: 0;
+width: 25%;
+float:left;
+text-align:center;
+}
+.block_2{
+width:50%;
+float:left;
+margin:0;
+padding: 0;
+
+}
+.block_3{
+float:left;
+width: 25%;
+margin:0;
+padding: 0;
+}
+.menu{
+padding: 10%;
+margin: 10%;
+background-color: #FFCC33;
+}
+.logo{
+margin: 10%;
+padding: 10%;
+background-color: #FFCC33;
+text-align:center;
+}
+.content{
+margin-top: 5%;
+margin-left: 5%;
+margin-right: 5%;
+padding: 5%;
+background-color: #FFCC33;
+}
+.MenuItem{
+width: 50%;
+margin-left: 25%;
+text-align:left;
+background-color: #FFF;
+
+}
+.MenuItem h4{
+    padding: 5px;
+}
+.MenuItem:hover{
+
+    background-color: #FFF;
+    border-left: 5px solid red;
+
+}
+.MenuItemHov:hover{
+
+}
+.MenuItemHovReg:hover{
+    background-color: #FFF;
+    margin-left: 2%;
+    border-left: 5px solid red;
+    }
+.MenuItemHovReg{
+    width: 30%;
+    background-color: #FFF;
+    
+    }
+.MenuItemHovReg h4{
+    padding: 5px;
+}
+.MenuItemHovRegbox{
+    float:left;
+    width: 100%;
+}
+a{
+text-decoration: none;
+color: #000;
+}
+.NamePart{
+    text-align: center;
+}
+.userdata{
+    overflow: hidden;
+}
+.UDT{
+    float:left;
+    width: 50%;
+}
+.EditUserDataForm{
+    width: 50%;
+    float:left;
+}
+.Products{
+    overflow: hidden;
+}
+.ProductTable{
+    width:90px;
+    height: 90px;
+    float:left;
+    padding: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    background-color: #FFF;
+}
+.ProductTable:hover{
+    border-left: 5px solid red;
+}
+.ProductTable h4{
+    text-align: center;
+    margin-top:0;
+}
+.ProductsLable{
+    margin:0;
+    padding:0;
+    overflow: hidden;
+    margin-bottom: 70px;
+}
+.ProductsLabelName{
+    float:left;
+    width: 50%;
+    margin:0;
+    padding: 0;
+    height: 75px;
+}
+.ProductsLabelButton{
+    float: right;;
+    margin: 0;
+    padding: 0;
+    height: 75px;
+}
+.ProductsLabelButton h4{
+    background-color: #FFF;
+    padding: 5px;
+}
+.ProductsLabelButton h4:hover{
+    border-left: 5px solid red;
+}
+.SearchForm{
+    margin-bottom: 20px;
+}

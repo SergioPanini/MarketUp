@@ -1,0 +1,27 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<h2 class='NamePart'>Поиск товаров</h2>
+
+<p class='SystemMessage'>{{ message }}</p>
+<div class="SearchForm">
+<form method='GET'>
+    {% csrf_token %}
+    {{Form}}
+    <input type='submit' value='Поиск'>
+</form>
+</div>
+
+<div class="Products">
+    {% for i in products %} <a href="../product/{{i.id}}">
+        <div class="ProductTable">
+            <h4>{{i.Name}}</h4>
+            <p>{{i.Description}}</p>
+        </div>
+    </a>
+    {% endfor %}
+
+</div>
+
+
+{% endblock content %}
