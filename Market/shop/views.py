@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Users, Products
-from .forms import reg_form, sign_In_form, add_product_form, search_products_form
+from .forms import reg_form, sign_in_form, add_product_form, search_products_form
 from django.core.files.storage import FileSystemStorage
 
 
@@ -34,7 +34,7 @@ def reg(request):
             user.save()
 
             request.session['Aut'] = True
-            request.session['iduser'] = user.id
+            request.session['user_id'] = user.id
             return render(request, 'Reg.html', context={'message': 'Вы зарегистрированы'})
 
     else:
@@ -45,7 +45,7 @@ def reg(request):
 def sign_out(request):
     if request.session.get('Aut', False):
         request.session['Aut'] = False
-        request.session['iduser'] = None
+        request.session['user_id'] = None
         return render(request, 'SignIn.html', context={'message': 'Вы вышли'})
 
     else:
@@ -56,28 +56,27 @@ def sign_in(request):
     if request.method == 'POST':
         user = users.objects.filter(email=request.POST['email'])
 
-
         if request.session.get('Aut', False) == True:
             return render(request, 'SignIn.html', context={'message': 'Вы уже авторизованы', 'Aut': True})
 
         elif user.count() == 0:
-            Newsign_In_form = sign_In_form()
-            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': 'Неправильный логин или пароль(Такого аккаунта нет)'})
+            Newsign_in_form = sign_in_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_in_form, 'message': 'Неправильный логин или пароль(Такого аккаунта нет)'})
 
         elif user[0].password == request.POST['password']:
             request.session['Aut'] = True
-            request.session['iduser'] = user[0].id
+            request.session['user_id'] = user[0].id
 
             return render(request, 'SignIn.html', context={'message': 'Вход выполнен успешно', 'Aut': True})
 
         else:
-            Newsign_In_form = sign_In_form()
-            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': 'Неправильный логин или пароль'})
+            Newsign_in_form = sign_in_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_in_form, 'message': 'Неправильный логин или пароль'})
 
     else:
         if not request.session.get('Aut', False):
-            Newsign_In_form = sign_In_form()
-            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': WelcomeMessage + 'Пожалуйста, авторизуйтесь'})
+            Newsign_in_form = sign_in_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_in_form, 'message': WelcomeMessage + 'Пожалуйста, авторизуйтесь'})
 
         else:
             return render(request, 'SignIn.html', context={'message': 'Вы уже авторизованы', 'Aut': True})
@@ -88,12 +87,12 @@ def me(request):
         return redirect('../signin/')
 
     else:
-        user = users.objects.get(id=request.session['iduser'])
+        user = users.objects.get(id=request.session['user_id'])
         userProducts = Products.objects.filter(user=user)
         NewForm = reg_form()
 
         if request.method == 'POST':
-            user = users.objects.get(id=request.session['iduser'])
+            user = users.objects.get(id=request.session['user_id'])
             user.email = request.POST['email']
             user.phone = request.POST['phone']
             user.name = request.POST['name']
@@ -114,7 +113,7 @@ def add_product(request):
         message = ''
 
         if request.method == 'POST':
-            user = users.objects.get(id=request.session['iduser'])
+            user = users.objects.get(id=request.session['user_id'])
             newproduct = Products(user=user)
             newproduct.name = request.POST['name']
             newproduct.description = request.POST['description']
@@ -125,14 +124,13 @@ def add_product(request):
             fs = FileSystemStorage()
             save_url = str(user.id) + '_' + str(newproduct.id) + '_img.jpg' 
             filename =  fs.save(save_url,uplfile)
-            print(filename, fs.url(filename))
             newproduct.img = filename
 
             newproduct.save()
             message = 'Товар добален'
             
-
         return render(request, 'AddProduct.html', context={'Aut':True, 'Form': NewForm, 'message':message})
+
 
 def edit_product(request, idProduct):
     if not request.session.get('Aut', False):
@@ -140,6 +138,7 @@ def edit_product(request, idProduct):
     
     if product.count() == 0:
         return render(request, 'ShowProduct.html', context={'Aut'})
+
 
 def show_all_products(request):
     message = ''
@@ -154,20 +153,18 @@ def show_all_products(request):
         else:
             products = Products.objects.all()        
         
-
     except:
         products = Products.objects.all()        
         
     return render(request, 'ShowAllProducts.html', context={'Aut':Aut, 'products': products, 'Form': search_products_form})
 
+
 def show_product(request, idProduct):
     product = Products.objects.filter(id=idProduct)
     Aut = request.session.get('Aut', False)
-    print(product, product.count())
     if product.count() == 0:
         return render(request, 'ShowProduct.html', context={'Aut':Aut, 'message': 'Такого товара нет'})
     else:
         user = product[0].user.name
         phoneuser = product[0].user.name
         return render(request, 'ShowProduct.html', context={'Aut':Aut, 'product': product[0], 'owner': user, 'phoneowner': phoneuser})
-
