@@ -20,13 +20,13 @@ def about(request):
 
 def reg(request):
     if request.method == 'POST':
-        user = users.objects.filter(email=request.POST['email'])
+        user = Users.objects.filter(email=request.POST['email'])
 
         if user.count() > 0:
             return render(request, 'Reg.html', context={'message': 'Такой аккаунт уже есть! '})
 
         else:
-            user = users()
+            user = Users()
             user.email = request.POST['email']
             user.phone = request.POST['phone']
             user.name = request.POST['name']
@@ -38,8 +38,8 @@ def reg(request):
             return render(request, 'Reg.html', context={'message': 'Вы зарегистрированы'})
 
     else:
-        reg_form = reg_form()
-        return render(request, 'Reg.html', context={'Form': reg_form})
+        reg_form_to_template = reg_form()
+        return render(request, 'Reg.html', context={'Form': reg_form_to_template})
 
 
 def sign_out(request):
@@ -54,7 +54,7 @@ def sign_out(request):
 
 def sign_in(request):
     if request.method == 'POST':
-        user = users.objects.filter(email=request.POST['email'])
+        user = Users.objects.filter(email=request.POST['email'])
 
         if request.session.get('Aut', False) == True:
             return render(request, 'SignIn.html', context={'message': 'Вы уже авторизованы', 'Aut': True})
@@ -87,12 +87,12 @@ def me(request):
         return redirect('../signin/')
 
     else:
-        user = users.objects.get(id=request.session['user_id'])
+        user = Users.objects.get(id=request.session['user_id'])
         userProducts = Products.objects.filter(user=user)
         NewForm = reg_form()
 
         if request.method == 'POST':
-            user = users.objects.get(id=request.session['user_id'])
+            user = Users.objects.get(id=request.session['user_id'])
             user.email = request.POST['email']
             user.phone = request.POST['phone']
             user.name = request.POST['name']
@@ -113,7 +113,7 @@ def add_product(request):
         message = ''
 
         if request.method == 'POST':
-            user = users.objects.get(id=request.session['user_id'])
+            user = Users.objects.get(id=request.session['user_id'])
             newproduct = Products(user=user)
             newproduct.name = request.POST['name']
             newproduct.description = request.POST['description']
