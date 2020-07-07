@@ -2,123 +2,122 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Users, Products
-from .forms import RegForm, SignInForm, AddProductForm, SearchProductsForm
-# Create your views here.
+from .forms import reg_form, sign_In_form, add_product_form, search_products_form
 from django.core.files.storage import FileSystemStorage
 
-WalcomeMessage = 'Хотите разместить свой товар? '
+
+WelcomeMessage = 'Хотите разместить свой товар? '
 AboutMessage = 'Это площядка для размещения объявлений.'
 
 
-def RootUrl(request):
+def root_url(request):
     return redirect('./about/')
 
 
-def About(request):
-
+def about(request):
     return render(request, 'About.html', context={'message': AboutMessage, 'Aut': request.session.get('Aut', False)})
 
 
-def Reg(request):
+def reg(request):
     if request.method == 'POST':
-        user = Users.objects.filter(Email=request.POST['Email'])
+        user = users.objects.filter(email=request.POST['email'])
 
         if user.count() > 0:
             return render(request, 'Reg.html', context={'message': 'Такой аккаунт уже есть! '})
 
         else:
-            user = Users()
-            user.Email = request.POST['Email']
-            user.Phone = request.POST['Phone']
-            user.Name = request.POST['Name']
-            user.Password = request.POST['Password']
+            user = users()
+            user.email = request.POST['email']
+            user.phone = request.POST['phone']
+            user.name = request.POST['name']
+            user.password = request.POST['password']
             user.save()
 
             request.session['Aut'] = True
-            request.session['idUser'] = user.id
+            request.session['iduser'] = user.id
             return render(request, 'Reg.html', context={'message': 'Вы зарегистрированы'})
 
     else:
-        regform = RegForm()
-        return render(request, 'Reg.html', context={'Form': regform})
+        reg_form = reg_form()
+        return render(request, 'Reg.html', context={'Form': reg_form})
 
 
-def SignOut(request):
+def sign_out(request):
     if request.session.get('Aut', False):
         request.session['Aut'] = False
-        request.session['idUser'] = None
+        request.session['iduser'] = None
         return render(request, 'SignIn.html', context={'message': 'Вы вышли'})
 
     else:
         return render(request, 'SignIn.html', context={'message': 'Вы не авторизованы'})
 
 
-def SignIn(request):
+def sign_in(request):
     if request.method == 'POST':
-        user = Users.objects.filter(Email=request.POST['Email'])
+        user = users.objects.filter(email=request.POST['email'])
 
 
         if request.session.get('Aut', False) == True:
             return render(request, 'SignIn.html', context={'message': 'Вы уже авторизованы', 'Aut': True})
 
         elif user.count() == 0:
-            NewSignInForm = SignInForm()
-            return render(request, 'SignIn.html', context={'Form': NewSignInForm, 'message': 'Неправильный логин или пароль(Такого аккаунта нет)'})
+            Newsign_In_form = sign_In_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': 'Неправильный логин или пароль(Такого аккаунта нет)'})
 
-        elif user[0].Password == request.POST['Password']:
+        elif user[0].password == request.POST['password']:
             request.session['Aut'] = True
-            request.session['idUser'] = user[0].id
+            request.session['iduser'] = user[0].id
 
             return render(request, 'SignIn.html', context={'message': 'Вход выполнен успешно', 'Aut': True})
 
         else:
-            NewSignInForm = SignInForm()
-            return render(request, 'SignIn.html', context={'Form': NewSignInForm, 'message': 'Неправильный логин или пароль'})
+            Newsign_In_form = sign_In_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': 'Неправильный логин или пароль'})
 
     else:
         if not request.session.get('Aut', False):
-            NewSignInForm = SignInForm()
-            return render(request, 'SignIn.html', context={'Form': NewSignInForm, 'message': WalcomeMessage + 'Пожалуйста, авторизуйтесь'})
+            Newsign_In_form = sign_In_form()
+            return render(request, 'SignIn.html', context={'Form': Newsign_In_form, 'message': WelcomeMessage + 'Пожалуйста, авторизуйтесь'})
 
         else:
             return render(request, 'SignIn.html', context={'message': 'Вы уже авторизованы', 'Aut': True})
 
 
-def Me(request):
+def me(request):
     if not request.session.get('Aut', False):
         return redirect('../signin/')
 
     else:
-        user = Users.objects.get(id=request.session['idUser'])
-        UserProducts = Products.objects.filter(User=user)
-        NewForm = RegForm()
+        user = users.objects.get(id=request.session['iduser'])
+        userProducts = Products.objects.filter(user=user)
+        NewForm = reg_form()
 
         if request.method == 'POST':
-            user = Users.objects.get(id=request.session['idUser'])
-            user.Email = request.POST['Email']
-            user.Phone = request.POST['Phone']
-            user.Name = request.POST['Name']
-            user.Password = request.POST['Password']
+            user = users.objects.get(id=request.session['iduser'])
+            user.email = request.POST['email']
+            user.phone = request.POST['phone']
+            user.name = request.POST['name']
+            user.password = request.POST['password']
             user.save()
 
-            return render(request, 'Me.html', context={'Aut': True, 'UserData': user, 'Form': NewForm, 'Products': UserProducts, 'message': 'Данные обновлены'})
+            return render(request, 'Me.html', context={'Aut': True, 'userData': user, 'Form': NewForm, 'Products': userProducts, 'message': 'Данные обновлены'})
 
         else:
-            return render(request, 'Me.html', context={'Aut': True, 'UserData': user, 'Form': NewForm, 'Products': UserProducts})
+            return render(request, 'Me.html', context={'Aut': True, 'userData': user, 'Form': NewForm, 'Products': userProducts})
 
 
-def AddProduct(request):
+def add_product(request):
     if not request.session.get('Aut', False):
         return redirect('../signin/')
     else:
-        NewForm = AddProductForm()
+        NewForm = add_product_form()
         message = ''
 
         if request.method == 'POST':
-            user = Users.objects.get(id=request.session['idUser'])
-            newproduct = Products(User=user)
-            newproduct.Name = request.POST['Name']
-            newproduct.Description = request.POST['Description']
+            user = users.objects.get(id=request.session['iduser'])
+            newproduct = Products(user=user)
+            newproduct.name = request.POST['name']
+            newproduct.description = request.POST['description']
 
             newproduct.save()
 
@@ -135,23 +134,23 @@ def AddProduct(request):
 
         return render(request, 'AddProduct.html', context={'Aut':True, 'Form': NewForm, 'message':message})
 
-def EditProduct(request, idProduct):
+def edit_product(request, idProduct):
     if not request.session.get('Aut', False):
         product = Products.objects.filter(id=idProduct)
     
     if product.count() == 0:
         return render(request, 'ShowProduct.html', context={'Aut'})
 
-def ShowAllProducts(request):
+def show_all_products(request):
     message = ''
-    NameSearch = ''
+    nameSearch = ''
     Aut = request.session.get('Aut', False)
-    SearchForm = SearchProductsForm()
+    SearchForm = search_products_form()
     
     try:
-        NameSearch = request.GET['NameSearch']
-        if NameSearch != '':
-            products = Products.objects.filter(Name=NameSearch)
+        nameSearch = request.GET['nameSearch']
+        if nameSearch != '':
+            products = Products.objects.filter(name=nameSearch)
         else:
             products = Products.objects.all()        
         
@@ -159,16 +158,16 @@ def ShowAllProducts(request):
     except:
         products = Products.objects.all()        
         
-    return render(request, 'ShowAllProducts.html', context={'Aut':Aut, 'products': products, 'Form': SearchProductsForm})
+    return render(request, 'ShowAllProducts.html', context={'Aut':Aut, 'products': products, 'Form': search_products_form})
 
-def ShowProduct(request, idProduct):
+def show_product(request, idProduct):
     product = Products.objects.filter(id=idProduct)
     Aut = request.session.get('Aut', False)
     print(product, product.count())
     if product.count() == 0:
         return render(request, 'ShowProduct.html', context={'Aut':Aut, 'message': 'Такого товара нет'})
     else:
-        user = product[0].User.Name
-        phoneuser = product[0].User.Name
+        user = product[0].user.name
+        phoneuser = product[0].user.name
         return render(request, 'ShowProduct.html', context={'Aut':Aut, 'product': product[0], 'owner': user, 'phoneowner': phoneuser})
 

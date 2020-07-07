@@ -3,16 +3,16 @@ from django.http import HttpResponseRedirect
 from . import views
 
 urlpatterns = [
-        path('', views.RootUrl),
-        path('reg/', views.Reg),
-        path('signin/', views.SignIn),
-        path('signout/', views.SignOut),
+        path('', views.root_url),
+        path('reg/', views.reg),
+        path('signin/', views.sign_in),
+        path('signout/', views.sign_out),
 
-        path('about/', views.About),
-        path('me/', views.Me),
-        path('addproduct/', views.AddProduct),
-        path('products/', views.ShowAllProducts),
-        path('product/<int:idProduct>/', views.ShowProduct),
+        path('about/', views.about),
+        path('me/', views.me),
+        path('addproduct/', views.add_product),
+        path('products/', views.show_all_products),
+        path('product/<int:idProduct>/', views.show_product),
 
 ]
 
